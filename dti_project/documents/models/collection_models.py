@@ -2,6 +2,7 @@ from datetime import timedelta
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from encrypted_model_fields.fields import EncryptedCharField, EncryptedTextField
 
 class CollectionReport(models.Model):
     report_items = models.ManyToManyField(
@@ -134,7 +135,7 @@ class CollectionReportItem(models.Model):
     date = models.DateField(default=timezone.now)
     number = models.CharField(max_length=50, blank=True, null=True, help_text='Official Receipt Number')
     rc_code = models.CharField(max_length=50, blank=True, null=True)
-    payor = models.CharField(max_length=255, blank=True, null=True)
+    payor = EncryptedCharField(max_length=255, blank=True, null=True)
     particulars = models.CharField(max_length=255, blank=True, null=True)
 
     

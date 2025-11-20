@@ -5,6 +5,7 @@ from documents.nationality_choices import NATIONALITY_CHOICES
 from ..models.base_models import BaseApplication, DraftModel, PeriodModel
 from django.utils import timezone
 from users.models import User
+from encrypted_model_fields.fields import EncryptedCharField, EncryptedTextField
 
 class PersonalDataSheet(DraftModel, models.Model):
     GENDER_CHOICES = [
@@ -28,18 +29,18 @@ class PersonalDataSheet(DraftModel, models.Model):
 
     date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    first_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50, blank=True, null=True)
-    last_name = models.CharField(max_length=50)
+    first_name = EncryptedCharField(max_length=50)
+    middle_name = EncryptedCharField(max_length=50, blank=True, null=True)
+    last_name = EncryptedCharField(max_length=50)
     image = models.ImageField(upload_to="personal_data_images")
     position = models.CharField(max_length=50)
-    sex = models.CharField(choices=GENDER_CHOICES, max_length=20)
-    civil_status = models.CharField(choices=CIVIL_STATUS_CHOICES, max_length=30)
-    nationality = models.CharField(max_length=30, choices=NATIONALITY_CHOICES)
-    date_of_birth = models.DateField()
-    current_address = models.TextField()
-    contact_number = models.CharField(max_length=20)
-    email_address = models.EmailField()
+    sex = EncryptedCharField(choices=GENDER_CHOICES, max_length=20)
+    civil_status = EncryptedCharField(choices=CIVIL_STATUS_CHOICES, max_length=30)
+    nationality = EncryptedCharField(max_length=30, choices=NATIONALITY_CHOICES)
+    date_of_birth = EncryptedCharField()
+    current_address = EncryptedTextField()
+    contact_number = EncryptedCharField(max_length=20)
+    email_address = EncryptedCharField()
 
     def __str__(self):
         return self.get_str_display(f"{self.first_name} {self.last_name}")
@@ -81,8 +82,8 @@ class CharacterReference(models.Model):
     personal_data_sheet = models.ForeignKey(PersonalDataSheet, related_name='character_references', on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     company = models.CharField(max_length=50)
-    email = models.EmailField(blank=True, null=True)
-    contact_number = models.CharField(max_length=20, blank=True, null=True)
+    email = EncryptedCharField(blank=True, null=True)
+    contact_number = EncryptedCharField(max_length=20, blank=True, null=True)
 
     def clean(self):
         if not self.email and not self.contact_number:

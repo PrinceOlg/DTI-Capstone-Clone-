@@ -7,6 +7,7 @@ from django.utils import timezone
 from ..model_choices import REGION_CHOICES, SERVICE_CATEGORY_CHOICES, STAR_RATING_CHOICES
 from users.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from encrypted_model_fields.fields import EncryptedCharField, EncryptedTextField, EncryptedEmailField
 
 class ServiceRepairAccreditationApplication(DraftModel, models.Model):
     class Meta:
@@ -71,33 +72,32 @@ class ServiceRepairAccreditationApplication(DraftModel, models.Model):
     barangay = models.ForeignKey(Barangay, on_delete=models.SET_NULL, null=True, blank=True)
     zip_code = models.CharField(max_length=10)
 
-    telephone_number = models.CharField(max_length=20)
-    mobile_number = models.CharField(max_length=20)
-    fax_number = models.CharField(max_length=20, blank=True, null=True)
-    email_address = models.EmailField(max_length=40)
+    telephone_number = EncryptedCharField(max_length=20)
+    mobile_number = EncryptedCharField(max_length=20)
+    fax_number = EncryptedCharField(max_length=20, blank=True, null=True)
+    email_address = EncryptedEmailField(max_length=40)
 
     # Authorized Signatory
     title = models.CharField(max_length=20)
-    first_name = models.CharField(max_length=30)
-    middle_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30)
-    suffix = models.CharField(max_length=10, blank=True)
-    designation = models.CharField(max_length=255)
+    first_name = EncryptedCharField(max_length=30)
+    middle_name = EncryptedCharField(max_length=30, blank=True)
+    last_name = EncryptedCharField(max_length=30)
+    suffix = EncryptedCharField(max_length=10, blank=True)
+    designation = EncryptedCharField(max_length=255)
 
-    
     # Additional Info
-    sex = models.CharField(max_length=6, choices=SEX_CHOICES)
-    social_classification = models.CharField(max_length=10, choices=SOCIAL_CLASSIFICATION_CHOICES)
-    asset_size = models.CharField(max_length=10, choices=ASSET_SIZE_CHOICES)
+    sex = EncryptedCharField(max_length=6, choices=SEX_CHOICES)
+    social_classification = EncryptedCharField(max_length=10, choices=SOCIAL_CLASSIFICATION_CHOICES)
+    asset_size = EncryptedCharField(max_length=10, choices=ASSET_SIZE_CHOICES)
     form_of_organization = models.CharField(max_length=20, choices=FORM_OF_ORGANIZATION_CHOICES)
-    industry_classification = models.CharField(max_length=255, blank=True)
+    industry_classification = EncryptedCharField(max_length=255, blank=True)
 
-    annual_gross_service_revenue = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True, help_text="Annual Gross Service Revenue (as of Dec 31, 20__)")
-    capital_investment = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
-    tax_identification_number = models.CharField(max_length=12)
-    mobile_number = models.CharField(max_length=11)
-    telephone_number = models.CharField(max_length=15, blank=True, null=True)
-    date_established = models.DateField(blank=True, null=True)
+    annual_gross_service_revenue = EncryptedCharField(max_length=15, blank=True, null=True, help_text="Annual Gross Service Revenue (as of Dec 31, 20__)")
+    capital_investment = EncryptedCharField(max_length=15, blank=True, null=True)
+    tax_identification_number = EncryptedCharField(max_length=12)
+    mobile_number = EncryptedCharField(max_length=11)
+    telephone_number = EncryptedCharField(max_length=15, blank=True, null=True)
+    date_established = EncryptedCharField(blank=True, null=True)
     total_employees = models.PositiveIntegerField()
 
     warranty_period = models.PositiveIntegerField(

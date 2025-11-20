@@ -6,6 +6,7 @@ from users.models import User
 from notifications.models import Notification
 from notifications.utils import send_user_notification
 from django.contrib.contenttypes.models import ContentType
+from encrypted_model_fields.fields import EncryptedCharField, EncryptedTextField, EncryptedEmailField
 import random
 import string
 
@@ -22,18 +23,18 @@ class SalesPromotionPermitApplication(DraftModel, BaseApplication):
     promo_title = models.CharField(max_length=255)
 
     sponsor_name = models.CharField(max_length=255)
-    sponsor_address = models.TextField()
-    sponsor_telephone = models.CharField(max_length=50, blank=True)
-    sponsor_email = models.EmailField(blank=True)
-    sponsor_authorized_rep = models.CharField(max_length=255)
-    sponsor_designation = models.CharField(max_length=255)
+    sponsor_address = EncryptedTextField()
+    sponsor_telephone = EncryptedCharField(max_length=50, blank=True)
+    sponsor_email = EncryptedEmailField(blank=True)
+    sponsor_authorized_rep = EncryptedCharField(max_length=255)
+    sponsor_designation = EncryptedCharField(max_length=255)
 
     advertising_agency_name = models.CharField(max_length=255, blank=True)
-    advertising_agency_address = models.TextField(blank=True)
-    advertising_agency_telephone = models.CharField(max_length=50, blank=True)
-    advertising_agency_email = models.EmailField(blank=True)
-    advertising_agency_authorized_rep = models.CharField(max_length=255, blank=True)
-    advertising_agency_designation = models.CharField(max_length=255, blank=True)
+    advertising_agency_address = EncryptedTextField(blank=True)
+    advertising_agency_telephone = EncryptedCharField(max_length=50, blank=True)
+    advertising_agency_email = EncryptedEmailField(blank=True)
+    advertising_agency_authorized_rep = EncryptedCharField(max_length=255, blank=True)
+    advertising_agency_designation = EncryptedCharField(max_length=255, blank=True)
 
     promo_period_start = models.DateField(null=True, blank=True)
     promo_period_end = models.DateField(null=True, blank=True)
